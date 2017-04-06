@@ -592,6 +592,7 @@ public class WaterwheelPlayerCtrl : MonoBehaviour {
 				PlayerAutoFire.ActiveIsTurnRight();
 				if (mSpeed > 15f && !pcvr.IsPlayerHitShake) {
 					pcvr.OpenQiNangZuo();
+					pcvr.CloseQiNangYou();
 				}
 			}
 
@@ -631,6 +632,7 @@ public class WaterwheelPlayerCtrl : MonoBehaviour {
 				PlayerAutoFire.ActiveIsTurnLeft();
 				if (mSpeed > 15f && !pcvr.IsPlayerHitShake) {
 					pcvr.OpenQiNangYou();
+					pcvr.CloseQiNangZuo();
 				}
 			}
 
@@ -696,9 +698,15 @@ public class WaterwheelPlayerCtrl : MonoBehaviour {
 		if (!pcvr.IsPlayerHitShake) {
 			if (mSpeed > 25f) {
 				pcvr.OpenQiNangQian();
+				pcvr.CloseQiNangHou();
 			}
 			else {
 				pcvr.CloseQiNangQian();
+			}
+
+			if (mSpeed < 5 && mouseDownCountTmp <= 0.1f) {
+				pcvr.CloseQiNangZuo();
+				pcvr.CloseQiNangYou();
 			}
 		}
 		GameCtrlXK.GetInstance().SetPlayerMvSpeedSpriteInfo(speedTmp / (0.65f * mMaxVelocityFoot));

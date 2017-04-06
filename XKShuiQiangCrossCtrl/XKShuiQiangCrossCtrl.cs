@@ -338,12 +338,12 @@ public class XKShuiQiangCrossCtrl : MonoBehaviour
 		string strA = "PosHit "+PosHit.ToString("f2")
 			+", GAngleVal "+gunRot.ToString("f2")
 			+", CrossPos "+CrossPos.ToString("f2");
-		GUI.Label(new Rect(10f, 30f, Screen.width, 30f), strA);
+		GUI.Label(new Rect(10f, 60f, Screen.width, 30f), strA);
 
 		strA = "RealScreen "+XianShiQiTr.localScale.ToString("f3")
 			+", GunTrPos "+GunTr.position.ToString("f3")
 			+", ScreenW "+Screen.width+" ScreenH "+Screen.height;
-		GUI.Label(new Rect(10f, 60f, Screen.width, 30f), strA);
+		GUI.Label(new Rect(10f, 90f, Screen.width, 30f), strA);
 	}
 	#endif
 }

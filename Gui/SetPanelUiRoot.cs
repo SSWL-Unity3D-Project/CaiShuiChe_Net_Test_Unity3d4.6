@@ -109,24 +109,32 @@ public class SetPanelUiRoot : MonoBehaviour
 		QNLF_FQ, //左前气囊放气.
 		QNRF_CQ, //右前气囊充气.
 		QNRF_FQ, //右前气囊放气.
-		QNRB_CQ, //右后气囊充气.
-		QNRB_FQ, //右后气囊放气.
+		QNLM_CQ, //左中气囊充气.
+		QNLM_FQ, //左中气囊放气.
+		QNRM_CQ, //右中气囊充气.
+		QNRM_FQ, //右中气囊放气.
 		QNLB_CQ, //左后气囊充气.
 		QNLB_FQ, //左后气囊放气.
+		QNRB_CQ, //右后气囊充气.
+		QNRB_FQ, //右后气囊放气.
 		QNEixt, //退出气囊测试.
 	}
 	QiNangTestEnum QiNangTestState = QiNangTestEnum.Null;
 	
 	Vector3[] QiNangTestStarPos = {
-		new Vector3(-430f, 135f, 0f),
-		new Vector3(-430f, 95f, 0f),
-		new Vector3(-430f, 55f, 0f),
-		new Vector3(-430f, 10f, 0f),
-		new Vector3(-430f, -30f, 0f),
-		new Vector3(-430f, -75f, 0f),
-		new Vector3(-430f, -115f, 0f),
-		new Vector3(-430f, -155f, 0f),
-		new Vector3(-430f, -200f, 0f),
+		new Vector3(-338f, 214f, 0f),
+		new Vector3(-338f, 185f, 0f),
+		new Vector3(-338f, 156f, 0f),
+		new Vector3(-338f, 125f, 0f),
+		new Vector3(-338f, 94f, 0f),
+		new Vector3(-338f, 64f, 0f),
+		new Vector3(-338f, 34f, 0f),
+		new Vector3(-338f, 1f, 0f),
+		new Vector3(-338f, -25f, 0f),
+		new Vector3(-338f, -54f, 0f),
+		new Vector3(-338f, -87f, 0f),
+		new Vector3(-338f, -118f, 0f),
+		new Vector3(-338f, -151f, 0f),
 	};
 
 	public static SetPanelUiRoot _Instance;
@@ -832,23 +840,39 @@ public class SetPanelUiRoot : MonoBehaviour
 		case QiNangTestEnum.QNRF_FQ:
 			pcvr.QiNangArray[1] = 0;
 			break;
+
+		case QiNangTestEnum.QNLM_CQ:
+			pcvr.QiNangArray[3] = 1;
+			break;
 			
-		case QiNangTestEnum.QNRB_CQ:
+		case QiNangTestEnum.QNLM_FQ:
+			pcvr.QiNangArray[3] = 0;
+			break;
+			
+		case QiNangTestEnum.QNRM_CQ:
 			pcvr.QiNangArray[2] = 1;
 			break;
 			
-		case QiNangTestEnum.QNRB_FQ:
+		case QiNangTestEnum.QNRM_FQ:
 			pcvr.QiNangArray[2] = 0;
 			break;
 			
 		case QiNangTestEnum.QNLB_CQ:
-			pcvr.QiNangArray[3] = 1;
+			pcvr.QiNangArray[4] = 1;
 			break;
 			
 		case QiNangTestEnum.QNLB_FQ:
-			pcvr.QiNangArray[3] = 0;
+			pcvr.QiNangArray[4] = 0;
+			break;
+
+		case QiNangTestEnum.QNRB_CQ:
+			pcvr.QiNangArray[5] = 1;
 			break;
 			
+		case QiNangTestEnum.QNRB_FQ:
+			pcvr.QiNangArray[5] = 0;
+			break;
+
 		case QiNangTestEnum.QNEixt:
 			pcvr.CloseAllQiNangArray();
 			CloseAllTestPanel();

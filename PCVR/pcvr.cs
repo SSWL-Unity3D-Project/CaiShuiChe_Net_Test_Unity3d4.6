@@ -194,6 +194,13 @@ public class pcvr : MonoBehaviour {
 ****************.显示器.****************
 QiNangArray[0]			QiNangArray[1]
 QiNangArray[3]			QiNangArray[2]
+QiNangArray[4]			QiNangArray[5]
+***************************************
+气囊动作:
+1.当玩家运动速度>=25或加油起步时,打开前气囊.
+1.当玩家运动速度>=25且左右打方向时,打开左右气囊.
+1.当玩家运动速度>=5且碰上障碍物时,全气囊充放气.
+1.当玩家运动速度>=5且松掉油门时,打开后气囊.
 	 */
 	public static byte[] QiNangArray = {0, 0, 0, 0, 0, 0};
 	public static void CloseAllQiNangArray()
@@ -209,7 +216,7 @@ QiNangArray[3]			QiNangArray[2]
 	static bool IsOpenQiNangYou;
 	public static void OpenQiNangQian()
 	{
-		if (IsOpenQiNangQian) {
+		if (IsOpenQiNangQian || IsPlayerHitShake) {
 			return;
 		}
 		IsOpenQiNangQian = true;
@@ -219,7 +226,7 @@ QiNangArray[3]			QiNangArray[2]
 
 	public static void CloseQiNangQian()
 	{
-		if (!IsOpenQiNangQian) {
+		if (!IsOpenQiNangQian || IsPlayerHitShake) {
 			return;
 		}
 		IsOpenQiNangQian = false;
@@ -229,62 +236,66 @@ QiNangArray[3]			QiNangArray[2]
 	
 	public static void OpenQiNangHou()
 	{
-		if (IsOpenQiNangHou) {
+		if (IsOpenQiNangHou || IsPlayerHitShake) {
 			return;
 		}
 		IsOpenQiNangHou = true;
-		QiNangArray[2] = 1;
-		QiNangArray[3] = 1;
+		QiNangArray[4] = 1;
+		QiNangArray[5] = 1;
 	}
 	
 	public static void CloseQiNangHou()
 	{
-		if (!IsOpenQiNangHou) {
+		if (!IsOpenQiNangHou || IsPlayerHitShake) {
 			return;
 		}
 		IsOpenQiNangHou = false;
-		QiNangArray[2] = 0;
-		QiNangArray[3] = 0;
+		QiNangArray[4] = 0;
+		QiNangArray[5] = 0;
 	}
 
 	public static void OpenQiNangZuo()
 	{
-		if (IsOpenQiNangZuo) {
+		if (IsOpenQiNangZuo || IsPlayerHitShake || PlayerYouMenSt != YouMenState.YouMenHengDing) {
 			return;
 		}
 		IsOpenQiNangZuo = true;
 		QiNangArray[0] = 1;
 		QiNangArray[3] = 1;
+		QiNangArray[4] = 1;
 	}
 
 	public static void CloseQiNangZuo()
 	{
-		if (!IsOpenQiNangZuo) {
+		if (!IsOpenQiNangZuo || IsPlayerHitShake || PlayerYouMenSt != YouMenState.YouMenHengDing) {
 			return;
 		}
 		IsOpenQiNangZuo = false;
 		QiNangArray[0] = 0;
 		QiNangArray[3] = 0;
+		QiNangArray[4] = 0;
 	}
 
 	public static void OpenQiNangYou()
 	{
-		if (IsOpenQiNangYou) {
+		if (IsOpenQiNangYou || IsPlayerHitShake || PlayerYouMenSt != YouMenState.YouMenHengDing) {
 			return;
 		}
 		IsOpenQiNangYou = true;
 		QiNangArray[1] = 1;
 		QiNangArray[2] = 1;
+		QiNangArray[5] = 1;
 	}
 	
 	public static void CloseQiNangYou()
 	{
-		if (!IsOpenQiNangYou) {
+		if (!IsOpenQiNangYou || IsPlayerHitShake || PlayerYouMenSt != YouMenState.YouMenHengDing) {
 			return;
 		}
 		IsOpenQiNangYou = false;
 		QiNangArray[1] = 0;
 		QiNangArray[2] = 0;
+		QiNangArray[5] = 0;
 	}
 
 	static void OpenAllQiNang()
@@ -320,18 +331,14 @@ QiNangArray[3]			QiNangArray[2]
 		int count = 0;
 		do {
 			if (count % 2 == 0) {
-//				OpenQiNangZuo();
-//				CloseQiNangYou();
 				OpenAllQiNang();
 			}
 			else {
-//				OpenQiNangYou();
-//				CloseQiNangZuo();
 				CloseAllQiNangArray();
 			}
 			yield return new WaitForSeconds(0.8f);
 
-			if (count >= 3) {
+			if (count >= 1) {
 				isHitShake = false;
 				ClosePlayerHitShake();
 				yield break;
@@ -390,7 +397,12 @@ QiNangArray[3]			QiNangArray[2]
 		}
 
 		if (DongGanState == 1 || HardwareCheckCtrl.IsTestHardWare) {
-			buffer[5] = (byte)(QiNangArray[0] + (QiNangArray[1] << 1) + (QiNangArray[2] << 2) + (QiNangArray[3] << 3));
+			buffer[5] = (byte)(QiNangArray[0]
+			                   + (QiNangArray[1] << 1)
+			                   + (QiNangArray[2] << 2)
+			                   + (QiNangArray[3] << 3)
+			                   + (QiNangArray[4] << 6)
+			                   + (QiNangArray[5] << 7));
 		}
 		else {
 			buffer[5] = 0x00;
@@ -399,11 +411,11 @@ QiNangArray[3]			QiNangArray[2]
 		if (IsOpenShuiBeng) {
 			switch (ShuiBengState) {
 			case PcvrShuiBengState.Level_1:
-				buffer[5] |= 0x10;
+				buffer[5] |= 0x20;
 				break;
 				
 			case PcvrShuiBengState.Level_2:
-				buffer[5] |= 0x10;
+				buffer[5] |= 0x20;
 				break;
 			}
 		}
@@ -1072,8 +1084,53 @@ QiNangArray[3]			QiNangArray[2]
 		}
 	}
 
+	static float TaBanCountLast;
+	static float TimeLastChangeYM = -10f;
+	enum YouMenState
+	{
+		JiaYouMen,			//加油门.
+		SongYouMen,			//松油门.
+		YouMenHengDing,		//油门恒定.
+	}
+	static YouMenState PlayerYouMenSt = YouMenState.YouMenHengDing;
 	public static float GetPcvrTaBanVal()
 	{
+		if (!IsPlayerHitShake) {
+			if (Mathf.Abs(TaBanCountLast - TanBanDownCount_P1) >= 0.3f) {
+				if (TaBanCountLast - TanBanDownCount_P1 < 0f) {
+					PlayerYouMenSt = YouMenState.JiaYouMen;
+				}
+				else {
+					PlayerYouMenSt = YouMenState.SongYouMen;
+				}
+				TaBanCountLast = TanBanDownCount_P1;
+				TimeLastChangeYM = Time.time;
+			}
+			else {
+				if (Time.time - TimeLastChangeYM > 1f && PlayerYouMenSt != YouMenState.YouMenHengDing) {
+					PlayerYouMenSt = YouMenState.YouMenHengDing;
+					TimeLastChangeYM = Time.time;
+				}
+			}
+			
+			if (Time.time - TimeLastChangeYM <= 1f) {
+				switch (PlayerYouMenSt) {
+				case YouMenState.JiaYouMen:
+					OpenQiNangQian();
+					CloseQiNangHou();
+					break;
+				case YouMenState.SongYouMen:
+					OpenQiNangHou();
+					CloseQiNangQian();
+					break;
+				case YouMenState.YouMenHengDing:
+					CloseQiNangQian();
+					CloseQiNangHou();
+					break;
+				}
+			}
+		}
+
 		if (IsGetValByKey) {
 			TanBanDownCount_P1 = Input.GetAxis("Vertical");
 			return TanBanDownCount_P1;
@@ -1712,9 +1769,18 @@ QiNangArray[3]			QiNangArray[2]
 	#if TEST_INPUT_CROSS_POS
 	void OnGUI()
 	{
+		float hVal = 25f;
 		string strA = "posInput "+Input.mousePosition.ToString("f2")
 			+", pcvrCrossPos "+MousePosition.ToString("f2");
-		GUI.Label(new Rect(10f, 5f, Screen.width, Screen.height), strA);
+		GUI.Label(new Rect(10f, 5f, Screen.width, hVal), strA);
+
+		strA = "qn1 "+QiNangArray[0]
+						+", qn2 "+QiNangArray[1]
+						+", qn3 "+QiNangArray[2]
+						+", qn4 "+QiNangArray[3]
+						+", qn5 "+QiNangArray[4]
+						+", qn6 "+QiNangArray[5];
+		GUI.Box(new Rect(10f, Screen.height - 35f, Screen.width, hVal), strA);
 	}
 	#endif
 
