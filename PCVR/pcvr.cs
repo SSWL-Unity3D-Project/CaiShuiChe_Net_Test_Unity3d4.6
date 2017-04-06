@@ -195,7 +195,7 @@ public class pcvr : MonoBehaviour {
 QiNangArray[0]			QiNangArray[1]
 QiNangArray[3]			QiNangArray[2]
 	 */
-	public static byte[] QiNangArray = {0, 0, 0, 0};
+	public static byte[] QiNangArray = {0, 0, 0, 0, 0, 0};
 	public static void CloseAllQiNangArray()
 	{
 		for (int i = 0; i < QiNangArray.Length; i++) {

@@ -15,6 +15,8 @@ public class HardwareBtCtrl : MonoBehaviour
 		QiNangBt_2,
 		QiNangBt_3,
 		QiNangBt_4,
+		QiNangBt_5,
+		QiNangBt_6,
 		JiaMiCheckBt,
 	}
 	public BtType BtState = BtType.CloseBt;
@@ -56,19 +58,12 @@ public class HardwareBtCtrl : MonoBehaviour
 			break;
 			
 		case BtType.QiNangBt_1:
-			OnClickQiNangBt(BtType.QiNangBt_1);
-			break;
-
 		case BtType.QiNangBt_2:
-			OnClickQiNangBt(BtType.QiNangBt_2);
-			break;
-
 		case BtType.QiNangBt_3:
-			OnClickQiNangBt(BtType.QiNangBt_3);
-			break;
-
 		case BtType.QiNangBt_4:
-			OnClickQiNangBt(BtType.QiNangBt_4);
+		case BtType.QiNangBt_5:
+		case BtType.QiNangBt_6:
+			OnClickQiNangBt(BtState);
 			break;
 
 		case BtType.JiaMiCheckBt:
@@ -200,6 +195,16 @@ public class HardwareBtCtrl : MonoBehaviour
 		case BtType.QiNangBt_4:
 			QiNangLabel.text = QiNangLabel.text != "气囊4充气" ? "气囊4充气" : "气囊4放气";
 			pcvr.QiNangArray[3] = (byte)(pcvr.QiNangArray[3] != 1 ? 1 : 0);
+			break;
+			
+		case BtType.QiNangBt_5:
+			QiNangLabel.text = QiNangLabel.text != "气囊5充气" ? "气囊5充气" : "气囊5放气";
+			pcvr.QiNangArray[4] = (byte)(pcvr.QiNangArray[4] != 1 ? 1 : 0);
+			break;
+			
+		case BtType.QiNangBt_6:
+			QiNangLabel.text = QiNangLabel.text != "气囊6充气" ? "气囊6充气" : "气囊6放气";
+			pcvr.QiNangArray[5] = (byte)(pcvr.QiNangArray[5] != 1 ? 1 : 0);
 			break;
 		}
 	}
