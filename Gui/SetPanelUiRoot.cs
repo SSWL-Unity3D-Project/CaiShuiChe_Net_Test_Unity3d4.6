@@ -4,6 +4,11 @@ using System;
 
 public class SetPanelUiRoot : MonoBehaviour
 {
+	/**
+	 * YouMenSt == YouMenTaBanEnum.JiaoTaBan   -> 机台采用脚踏板来控制运动.
+	 * YouMenSt == YouMenTaBanEnum.YouMenTaBan -> 机台采用油门踏板来控制运动.
+	 */
+	public static YouMenTaBanEnum YouMenSt = YouMenTaBanEnum.YouMenTaBan;
 	public UILabel CoinStartLabel;
 	public UISprite DuiGouDiffLow;
 	public UISprite DuiGouDiffMiddle;
@@ -30,6 +35,7 @@ public class SetPanelUiRoot : MonoBehaviour
 	
 	public GameObject DirAdjustObj;
 	public GameObject PedalAdjustObj;
+	public UISprite TaBanAdjustSprite;
 	public GameObject GunAdjustObj;
 	public UISprite SpriteAdjustDir;
 	public UISprite SpriteAdjustGunCross;
@@ -694,6 +700,14 @@ public class SetPanelUiRoot : MonoBehaviour
 			break;
 
 		case SelectJiaoZhunDate.PedalAdjust:
+			if (YouMenSt == YouMenTaBanEnum.JiaoTaBan) {
+				TaBanAdjustSprite.spriteName = "JiaoZhunTB";
+			}
+
+			if (YouMenSt == YouMenTaBanEnum.YouMenTaBan) {
+				TaBanAdjustSprite.spriteName = "JiaoZhunYMTB";
+				pcvr.InitUpdateYouMenMinVal();
+			}
 			DirAdjustObj.SetActive(false);
 			PedalAdjustObj.SetActive(true);
 			GunAdjustObj.SetActive(false);
@@ -1065,4 +1079,10 @@ public enum AdjustGunDrossState
 	GunCrossLD,
 	GunCrossCen,
 	GunCrossOver,
+}
+
+public enum YouMenTaBanEnum
+{
+	JiaoTaBan,		//机台采用脚踏板来控制运动.
+	YouMenTaBan,	//机台采用油门踏板来控制运动.
 }

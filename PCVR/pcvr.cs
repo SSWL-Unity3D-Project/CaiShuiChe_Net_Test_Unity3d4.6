@@ -140,6 +140,7 @@ public class pcvr : MonoBehaviour {
 
 	void FixedUpdate()
 	{
+		UpdateYouMenMinVal();
 		if (MyCOMDevice.ComThreadClass.IsLoadingLevel) {
 			return;
 		}
@@ -1050,6 +1051,34 @@ QiNangArray[4]			QiNangArray[5]
 		//ScreenLog.Log("TaBanDisVal " + TaBanDisVal + ", TaBanValMax " + TaBanValMax + ", TaBanValMin " + TaBanValMin);
 	}
 
+	static int YouMenCount = 100;
+	static float YouMenMinValLast;
+	public static void InitUpdateYouMenMinVal()
+	{
+		YouMenMinValLast = 0f;
+		YouMenCount = 0;
+	}
+
+	void UpdateYouMenMinVal()
+	{
+		if (Time.frameCount % 2 != 0) {
+			return;
+		}
+
+		if (YouMenCount >= 10) {
+			return;
+		}
+
+		YouMenMinValLast += (float)TaBanValCur;
+		if (YouMenCount == 9) {
+			YouMenMinValLast /= 10f;
+			TaBanValMin = (uint)YouMenMinValLast;
+			YouMenCount = 100;
+			Debug.Log("UpdateYouMenMinVal -> YouMenMinValLast = "+YouMenMinValLast.ToString("f2"));
+		}
+		YouMenCount++;
+	}
+
 	public static void SaveTaBanVal(uint TaBanVal, PcvrValState key)
 	{
 		switch (key) {
@@ -1063,7 +1092,13 @@ QiNangArray[4]			QiNangArray[5]
 				SaveTaBanVal(1, PcvrValState.ValMin);
 			}
 			else {
-				SaveTaBanVal(TanBanCenterNum, PcvrValState.ValMin);
+				if (SetPanelUiRoot.YouMenSt == YouMenTaBanEnum.JiaoTaBan) {
+					SaveTaBanVal(TanBanCenterNum, PcvrValState.ValMin);
+				}
+
+				if (SetPanelUiRoot.YouMenSt == YouMenTaBanEnum.JiaoTaBan) {
+					SaveTaBanVal(TaBanValMin, PcvrValState.ValMin);
+				}
 
 				uint bikeTaBanNum = TaBanVal;
 				if(bikeTaBanNum >= TanBanCenterNum)

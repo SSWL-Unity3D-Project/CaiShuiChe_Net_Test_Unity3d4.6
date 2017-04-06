@@ -2,7 +2,11 @@
 using System.Collections;
 
 public class GameMovieCtrl : MonoBehaviour {
-	
+	/**
+	 * YouMenSt == YouMenTaBanEnum.JiaoTaBan   -> 机台采用脚踏板来控制运动.
+	 * YouMenSt == YouMenTaBanEnum.YouMenTaBan -> 机台采用油门踏板来控制运动.
+	 */
+	public YouMenTaBanEnum YouMenSt = YouMenTaBanEnum.YouMenTaBan;
 	public MovieTexture move;
 	public MovieTexture moveServer;
 	
@@ -20,6 +24,7 @@ public class GameMovieCtrl : MonoBehaviour {
 	// Use this for initialization
 	void Start()
 	{
+		SetPanelUiRoot.YouMenSt = YouMenSt;
 		AudioListener.volume = (float)GlobalData.GameAudioVolume / 10f;
 		if(_instance == null) {
 			_instance = this;
