@@ -2,11 +2,17 @@
 using System.Collections;
 
 public class GameMovieCtrl : MonoBehaviour {
-	/**
+    public enum GameLinkEnum
+    {
+        LINK,      //联机模式.
+        NO_LINK,   //单机模式.
+    }
+    public GameLinkEnum GameLinkSt = GameLinkEnum.LINK;
+    /**
 	 * YouMenSt == YouMenTaBanEnum.JiaoTaBan   -> 机台采用脚踏板来控制运动.
 	 * YouMenSt == YouMenTaBanEnum.YouMenTaBan -> 机台采用油门踏板来控制运动.
 	 */
-	public YouMenTaBanEnum YouMenSt = YouMenTaBanEnum.YouMenTaBan;
+    public YouMenTaBanEnum YouMenSt = YouMenTaBanEnum.YouMenTaBan;
 	public MovieTexture move;
 	public MovieTexture moveServer;
 	
@@ -20,17 +26,24 @@ public class GameMovieCtrl : MonoBehaviour {
 
 	GameObject AudioManagerObj;
 	AudioListener AudioLis;
-	
+	void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            PlayMovie();
+        }
+    }
 	// Use this for initialization
 	void Start()
 	{
 		SetPanelUiRoot.YouMenSt = YouMenSt;
 		AudioListener.volume = (float)GlobalData.GameAudioVolume / 10f;
-		if(_instance == null) {
-			_instance = this;
-			//DontDestroyOnLoad( gameObject );
-			PlayMovie();
-		}
+		//if(_instance == null) {
+		//	_instance = this;
+		//	//DontDestroyOnLoad( gameObject );
+		//	PlayMovie();
+		//}
 		pcvr.DongGanState = 0;
 		//Invoke("DelayCheckPcvr", Random.Range(5f, 15f));
 	}

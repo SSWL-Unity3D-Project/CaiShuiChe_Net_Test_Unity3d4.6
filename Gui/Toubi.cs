@@ -355,8 +355,11 @@ public class Toubi : MonoBehaviour {
 
 			AudioManager.Instance.PlaySFX(AudioListCtrl.GetInstance().AudioXuanZe);
 			StartBtObj.SetActive(false);
-			ModeObj.SetActive(true);
-			SelecteCartoon.GetInstance().Invoke("InitSelecteCartoon", 0.5f);
+            if (GameMovieCtrl.GetInstance().GameLinkSt == GameMovieCtrl.GameLinkEnum.LINK)
+            {
+                ModeObj.SetActive(true);
+                SelecteCartoon.GetInstance().Invoke("InitSelecteCartoon", 0.5f);
+            }
 
 			if(!GlobalData.GetInstance().IsFreeMode)
 			{
@@ -381,8 +384,17 @@ public class Toubi : MonoBehaviour {
 						Invoke("CloseMovie", 0f);
 					});
 				}
-			}
-		}
+            }
+
+            if (GameMovieCtrl.GetInstance().GameLinkSt == GameMovieCtrl.GameLinkEnum.NO_LINK)
+            {
+                if (!isSelectMode)
+                {
+                    GlobalData.GetInstance().gameMode = GameMode.SoloMode;
+                    InitHiddenMode();
+                }
+            }
+        }
 		else if(!isSelectMode)
 		{
 			InitHiddenMode();

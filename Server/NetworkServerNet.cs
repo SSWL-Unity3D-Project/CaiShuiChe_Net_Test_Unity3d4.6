@@ -31,8 +31,14 @@ public class NetworkServerNet : MonoBehaviour {
 	}
 
 	void Awake()
-	{
-		if (!pcvr.bIsHardWare) {
+    {
+        if (GameMovieCtrl.GetInstance() != null
+            && GameMovieCtrl.GetInstance().GameLinkSt == GameMovieCtrl.GameLinkEnum.NO_LINK)
+        {
+            return;
+        }
+
+        if (!pcvr.bIsHardWare) {
 			MasterServerIp = HandleJson.GetInstance().ReadFromFilePathXml(MasterServerIpFile, "MasterServerIp");
 			if (MasterServerIp == null || MasterServerIp == "") {
 				MasterServerIp = "192.168.0.2";
@@ -392,7 +398,7 @@ public class NetworkServerNet : MonoBehaviour {
 			return;
 		}
 
-//		ScreenLog.Log("start create to server");
+		ScreenLog.Log("start create to server");
 		Network.InitializeServer(7, port, true);
 
 //		Debug.Log("masterServer.ip " + MasterServer.ipAddress + ", port " + MasterServer.port

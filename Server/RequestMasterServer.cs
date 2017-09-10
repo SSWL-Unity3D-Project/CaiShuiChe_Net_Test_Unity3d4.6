@@ -42,8 +42,8 @@ public class RequestMasterServer : MonoBehaviour
 
 	float RandConnectTime = Random.Range(3f, 10f);
 	public static float TimeConnectServer = 0f;
-	void OnGUI() {
-
+	void OnGUI()
+    {
 		GameLeve levelVal = GlobalData.GetInstance().gameLeve;
 		HostData[] data = MasterServer.PollHostList();
 
