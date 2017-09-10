@@ -626,7 +626,7 @@ QiNangArray[4]			QiNangArray[5]
 	static float OffsetPX = 15f;
 	static float OffsetPY = 10f;
 	public static byte DongGanState = 1;
-	void UpdatePcvrCrossPos(byte []buffer)
+	public static void UpdatePcvrCrossPos(byte []buffer)
 	{
 		Vector2 crossPos = Vector2.zero;
 		#if TEST_SHUIQIANG_ZUOBIAO

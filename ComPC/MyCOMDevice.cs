@@ -105,12 +105,9 @@ public class MyCOMDevice : MonoBehaviour {
 				if (pcvr.IsJiaoYanHid || pcvr.IsSlowLoopCom) {
 					Thread.Sleep(100);
 				}
-				else {
-					Thread.Sleep(25);
-				}
 				COMRxData();
 				IsTestWRPer = true;
-				Thread.Sleep(25);
+				Thread.Sleep(10);
 			}
 			while (_SerialPort.IsOpen);
 			CloseComPort();
@@ -128,7 +125,7 @@ public class MyCOMDevice : MonoBehaviour {
 			}
 			catch (Exception exception)
 			{
-//				Debug.LogError("Tx error:COM!!! " + exception);
+				Debug.LogError("Tx error:COM!!! " + exception);
 			}
 		}
 		
@@ -142,10 +139,11 @@ public class MyCOMDevice : MonoBehaviour {
 				ReadCount += (ReadByteMsg.Length + BufLenReadEnd);
 				IsReadComMsg = true;
 				ReadMsgTimeOutVal = 0f;
-			}
+                pcvr.UpdatePcvrCrossPos(ReadByteMsg);
+            }
 			catch (Exception exception)
 			{
-//				Debug.LogError("Rx error:COM..." + exception);
+				Debug.LogError("Rx error:COM..." + exception);
 				IsReadMsgComTimeOut = true;
 				IsReadComMsg = false;
 			}
