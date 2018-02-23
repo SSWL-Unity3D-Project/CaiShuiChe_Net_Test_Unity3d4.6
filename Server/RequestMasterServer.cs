@@ -273,8 +273,8 @@ public class RequestMasterServer : MonoBehaviour
         if (msEvent == MasterServerEvent.RegistrationSucceeded) {
 			Debug.Log("MasterServer registered, GameLevel " + GlobalData.GetInstance().gameLeve);
 			if (Application.loadedLevel == (int)GameLeve.Movie) {
-				//ServerLinkInfo.GetInstance().HiddenServerLinkInfo();
-				FreeModeCtrl.GetInstance().CreateNetworkRpc();
+                //ServerLinkInfo.GetInstance().HiddenServerLinkInfo();
+                NetworkRootMovie.GetInstance().mNetworkRpcMsgSpawn.CreateNetworkRpc();
 			}
 		}
 	}

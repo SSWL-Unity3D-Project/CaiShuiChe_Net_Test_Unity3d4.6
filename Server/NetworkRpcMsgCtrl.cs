@@ -1,8 +1,11 @@
 using UnityEngine;
 
+/// <summary>
+/// 循环动画网络通信.
+/// </summary>
 public class NetworkRpcMsgCtrl : MonoBehaviour
 {
-	NetworkView netViewCom;
+	NetworkView mNetViewCom;
 	public static int MaxLinkServerCount = 100;
 	public static int NoLinkClientCount = 10;
 
@@ -12,31 +15,34 @@ public class NetworkRpcMsgCtrl : MonoBehaviour
 		return _Instance;
 	}
 
-	// Use this for initialization
-	void Start () {
-		if (_Instance != null) {
+	public void Init()
+    {
+		if (_Instance != null)
+        {
 			_Instance.RemoveSelf();
 		}
+
 		_Instance = this;
 		DontDestroyOnLoad(gameObject);
 		gameObject.name = "_NetworkRpcMsgCtrl";
-		netViewCom = GetComponent<NetworkView>();
+		mNetViewCom = GetComponent<NetworkView>();
 	}
 
 	public void RemoveSelf()
 	{
-		if (gameObject == null) {
+		if (gameObject == null)
+        {
 			return;
 		}
 		_Instance = null;
 		Network.Destroy(gameObject);
 		Debug.Log("NetworkRpcMsgCtrl::RemoveSelf...");
-		//Destroy(gameObject);
 	}
 
 	public void SendLoadLevel(int levelVal)
 	{
-		if (levelVal == (int)GameLeve.None || levelVal == (int)GameLeve.SetPanel || levelVal == (int)GameLeve.Waterwheel) {
+		if (levelVal == (int)GameLeve.None || levelVal == (int)GameLeve.SetPanel || levelVal == (int)GameLeve.Waterwheel)
+        {
 			return;
 		}
 
@@ -49,18 +55,10 @@ public class NetworkRpcMsgCtrl : MonoBehaviour
 		GlobalData.GetInstance().gameLeve = (GameLeve)levelVal;
 		Debug.Log("SendLoadLevel -> levelVal = " + (GameLeve)levelVal);
 
-		if (Network.peerType != NetworkPeerType.Disconnected) {
-			netViewCom.RPC("SendLoadLevelMsgToOthers", RPCMode.OthersBuffered, levelVal);
+		if (Network.peerType != NetworkPeerType.Disconnected)
+        {
+			mNetViewCom.RPC("SendLoadLevelMsgToOthers", RPCMode.OthersBuffered, levelVal);
 		}
-
-		/*if (Network.peerType == NetworkPeerType.Server) {
-			NetworkServerNet.GetInstance().RemoveMasterServerHost();
-			if (MaxLinkServerCount == 0) {
-				MaxLinkServerCount = NoLinkClientCount;
-			}
-		}*/
-		//Application.LoadLevel(levelVal);
-		//Application.LoadLevelAsync(levelVal);
 	}
 
 	[RPC]
@@ -70,28 +68,20 @@ public class NetworkRpcMsgCtrl : MonoBehaviour
 		{
 			return;
 		}
-		Debug.Log("SendLoadLevelMsgToOthers*********** levelVal " + (GameLeve)levelVal);
+		Debug.Log("SendLoadLevelMsgToOthers *********** levelVal " + (GameLeve)levelVal);
 		MaxLinkServerCount = Network.connections.Length;
 		RequestMasterServer.GetInstance().ResetIsClickConnect();
 		Toubi.GetInstance().MakeGameIntoWaterwheelNet();
 
 		GlobalData.GetInstance().gameLeve = (GameLeve)levelVal;
-
-		/*if (Network.peerType == NetworkPeerType.Server) {
-			NetworkServerNet.GetInstance().RemoveMasterServerHost();
-		}*/
-		//Application.LoadLevel(levelVal);
-		//Application.LoadLevelAsync(levelVal);
-		//Debug.Log("SendLoadLevelMsgToOthers -> levelVal = " + levelVal);
 	}
 
 	public void SetSpawnClientIndex(NetworkPlayer playerNet, int val)
 	{
 		LinkPlayerCtrl.GetInstance().DisplayLinkPlayerName(val);
-
-		if (Network.peerType != NetworkPeerType.Disconnected) {
-			
-			netViewCom.RPC("SendSpawnClientIndex", RPCMode.OthersBuffered, playerNet, val);
+		if (Network.peerType != NetworkPeerType.Disconnected)
+        {
+			mNetViewCom.RPC("SendSpawnClientIndex", RPCMode.OthersBuffered, playerNet, val);
 		}
 	}
 	
@@ -99,7 +89,8 @@ public class NetworkRpcMsgCtrl : MonoBehaviour
 	void SendSpawnClientIndex(NetworkPlayer playerNet, int val)
 	{
 		LinkPlayerCtrl.GetInstance().DisplayLinkPlayerName(val);
-		if (playerNet != Network.player) {
+		if (playerNet != Network.player)
+        {
 			return;
 		}
 		NetworkServerNet.GetInstance().SetIndexSpawnClient(val);

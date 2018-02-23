@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using System;
 using System.IO;
 
@@ -210,7 +208,6 @@ public enum GameLeve:int
 {
 	None				= -1,
 	Movie				= 0,
-
 	Waterwheel			= 1,
 	WaterwheelNet		= 2,
 	SetPanel			= 3

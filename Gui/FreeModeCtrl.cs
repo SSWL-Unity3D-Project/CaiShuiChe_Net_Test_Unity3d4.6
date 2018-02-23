@@ -4,9 +4,8 @@ using System.Collections;
 using System;
 using System.Runtime.InteropServices;
 
-public class FreeModeCtrl : MonoBehaviour {
-
-	public GameObject NetworkRpcObj;
+public class FreeModeCtrl : MonoBehaviour
+{
 	public GameObject RootObj;
 	public GameObject StartPageObj;
 
@@ -182,23 +181,6 @@ public class FreeModeCtrl : MonoBehaviour {
 				}
 			}
 		}
-	}
-
-	public void CreateNetworkRpc()
-	{
-		if (NetworkRpcMsgCtrl.GetInstance() != null || GlobalData.GetInstance().gameLeve != GameLeve.Movie) {
-			return;
-		}
-
-		if (GlobalData.GetInstance().gameMode != GameMode.OnlineMode) {
-			return;
-		}
-
-		if (NetworkRpcObj == null) {
-			return;
-		}
-		Transform tran = NetworkRpcObj.transform;
-		Network.Instantiate(NetworkRpcObj, tran.position, tran.rotation, GlobalData.NetWorkGroup);
 	}
 
 	// Use this for initialization
