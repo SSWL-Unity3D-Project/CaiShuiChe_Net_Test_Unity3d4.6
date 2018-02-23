@@ -197,16 +197,6 @@ public class GlobalData  {
 
 	public int BikeHeadSpeedState = 2;
 	public int BikeZuLiDengJi = 0;
-
-	
-	public void RemoveNetworkRpc()
-	{
-		if (NetworkRpcMsgCtrl.GetInstance() == null) {
-			return;
-		}
-		
-		NetworkRpcMsgCtrl.GetInstance().RemoveSelf();
-	}
 }
 
 public enum GameMode

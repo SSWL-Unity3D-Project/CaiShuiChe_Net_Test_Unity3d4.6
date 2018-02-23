@@ -1,8 +1,7 @@
 using UnityEngine;
-using System.Collections;
 
-public class NetworkRpcMsgCtrl : MonoBehaviour {
-
+public class NetworkRpcMsgCtrl : MonoBehaviour
+{
 	NetworkView netViewCom;
 	public static int MaxLinkServerCount = 100;
 	public static int NoLinkClientCount = 10;

@@ -1,19 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NetworkServerNet : MonoBehaviour {
-
-	public bool IsServer = false;
-	
+public class NetworkServerNet : MonoBehaviour
+{
 	string MasterServerIpFile = "./MasterServerIP.info";
 	string MasterServerIp = "192.168.0.2";
-	private const int port = 23465;
-
-	public Transform NetCtrlPrefab = null;
-
+	private int port = 23465;
 	bool IsTryToLinkServer = true;
 	bool IsCreateServer = true;
-	int LinkServerIpCount;
+    /// <summary>
+    /// 链接到服务器的玩家数量.
+    /// </summary>
+	int LinkServerCount;
+    /// <summary>
+    /// 玩家网络数据索引.
+    /// </summary>
 	int IndexSpawnClient;
 	float TimeCreateServer;
     /// <summary>
@@ -108,9 +109,13 @@ public class NetworkServerNet : MonoBehaviour {
 				yield return new WaitForSeconds(0.5f);
 			}
 		}
+        
+        if (NetworkRpcMsgCtrl.GetInstance() != null)
+        {
+            NetworkRpcMsgCtrl.GetInstance().RemoveSelf();
+        }
 
-		GlobalData.GetInstance().RemoveNetworkRpc();
-		int playerIndex = IndexSpawnClient;
+        int playerIndex = IndexSpawnClient;
 		Debug.Log("CheckConnectToServer::playerIndex " + playerIndex);
 		
 		GameObject obj = GameNetCtrlXK.GetInstance().PlayerObj[playerIndex];
@@ -194,9 +199,13 @@ public class NetworkServerNet : MonoBehaviour {
 			}
 			isCheck = false;
 		}
-		GlobalData.GetInstance().RemoveNetworkRpc();
-		
-		GameObject obj = GameNetCtrlXK.GetInstance().PlayerObj[0];
+        
+        if (NetworkRpcMsgCtrl.GetInstance() != null)
+        {
+            NetworkRpcMsgCtrl.GetInstance().RemoveSelf();
+        }
+
+        GameObject obj = GameNetCtrlXK.GetInstance().PlayerObj[0];
 		Transform tran = GameNetCtrlXK.GetInstance().PlayerPos[0].transform;
 		GameObject player = (GameObject)Network.Instantiate(obj, tran.position, tran.rotation, GlobalData.NetWorkGroup);
 		WaterwheelPlayerNetCtrl playerScript = player.GetComponent<WaterwheelPlayerNetCtrl>();
@@ -209,12 +218,12 @@ public class NetworkServerNet : MonoBehaviour {
 
 	void CreateAiPlayer()
 	{
-		if (LinkServerIpCount + RankingCtrl.ServerPlayerRankNum >= RankingCtrl.MaxPlayerRankNum) {
+		if (LinkServerCount + RankingCtrl.ServerPlayerRankNum >= RankingCtrl.MaxPlayerRankNum) {
 			return;
 		}
 
-		int aiPlayerMax = RankingCtrl.MaxPlayerRankNum - RankingCtrl.ServerPlayerRankNum - LinkServerIpCount;
-		int aiPosNum = RankingCtrl.ServerPlayerRankNum + LinkServerIpCount;
+		int aiPlayerMax = RankingCtrl.MaxPlayerRankNum - RankingCtrl.ServerPlayerRankNum - LinkServerCount;
+		int aiPosNum = RankingCtrl.ServerPlayerRankNum + LinkServerCount;
 
 		GameObject obj;
 		Transform tran;
@@ -229,7 +238,7 @@ public class NetworkServerNet : MonoBehaviour {
 
 			aiPosNum++;
 		}
-		LinkServerIpCount = 0;
+		LinkServerCount = 0;
 	}
 
 	void OnPlayerConnected(NetworkPlayer playerNet)
@@ -245,7 +254,7 @@ public class NetworkServerNet : MonoBehaviour {
 			StartCoroutine(CheckOpenAllCamera());
 		}
 		else if (GlobalData.GetInstance().gameLeve == GameLeve.Movie) {
-			LinkServerIpCount = Network.connections.Length;
+			LinkServerCount = Network.connections.Length;
 			NetworkRpcMsgCtrl.GetInstance().SetSpawnClientIndex(playerNet, Network.connections.Length);
 		}
 	}
@@ -418,11 +427,11 @@ public class NetworkServerNet : MonoBehaviour {
 		switch (GlobalData.GetInstance().gameLeve) {
 		case GameLeve.Movie:
 			RequestMasterServer.GetInstance().SetMasterServerIp(Network.player.ipAddress);
-			MasterServer.RegisterHost(mGameTypeName, "JohnDoes game", RequestMasterServer.MasterServerMovieComment);
+			MasterServer.RegisterHost(mGameTypeName, "My game", RequestMasterServer.MasterServerMovieComment);
 			break;
 
 		case GameLeve.WaterwheelNet:
-			MasterServer.RegisterHost(mGameTypeName, "JohnDoes game", RequestMasterServer.MasterServerGameNetComment);
+			MasterServer.RegisterHost(mGameTypeName, "My game", RequestMasterServer.MasterServerGameNetComment);
 			break;
 		}
 	}
