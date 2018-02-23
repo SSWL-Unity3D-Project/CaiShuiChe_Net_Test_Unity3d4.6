@@ -16,6 +16,11 @@ public class NetworkServerNet : MonoBehaviour {
 	int LinkServerIpCount;
 	int IndexSpawnClient;
 	float TimeCreateServer;
+    /// <summary>
+    /// 网络游戏类型名称.
+    /// </summary>
+    [HideInInspector]
+    public string mGameTypeName = "MyUniqueGameType";
 
 	private static NetworkServerNet _Instance;
 	public static NetworkServerNet GetInstance()
@@ -45,6 +50,7 @@ public class NetworkServerNet : MonoBehaviour {
 				HandleJson.GetInstance().WriteToFilePathXml(MasterServerIpFile, "MasterServerIp", MasterServerIp);
 			}
 		}
+        Debug.Log("MasterServerIp " + MasterServerIp);
 
 		if (MasterServerIp == Network.player.ipAddress) {
 			XKMasterServerCtrl.CheckMasterServerIP();
@@ -404,7 +410,6 @@ public class NetworkServerNet : MonoBehaviour {
 //		Debug.Log("masterServer.ip " + MasterServer.ipAddress + ", port " + MasterServer.port
 //		          + ", updateRate " + MasterServer.updateRate);
 		MasterServer.dedicatedServer = true;
-		//MasterServer.RegisterHost("MyUniqueGameType", "JohnDoes game", "l33t game for all");
 
 		if (GlobalData.GetInstance().gameLeve == GameLeve.None) {
 			GlobalData.GetInstance().gameLeve = (GameLeve)Application.loadedLevel;
@@ -413,11 +418,11 @@ public class NetworkServerNet : MonoBehaviour {
 		switch (GlobalData.GetInstance().gameLeve) {
 		case GameLeve.Movie:
 			RequestMasterServer.GetInstance().SetMasterServerIp(Network.player.ipAddress);
-			MasterServer.RegisterHost("MyUniqueGameType", "JohnDoes game", RequestMasterServer.MasterServerMovieComment);
+			MasterServer.RegisterHost(mGameTypeName, "JohnDoes game", RequestMasterServer.MasterServerMovieComment);
 			break;
 
 		case GameLeve.WaterwheelNet:
-			MasterServer.RegisterHost("MyUniqueGameType", "JohnDoes game", RequestMasterServer.MasterServerGameNetComment);
+			MasterServer.RegisterHost(mGameTypeName, "JohnDoes game", RequestMasterServer.MasterServerGameNetComment);
 			break;
 		}
 	}

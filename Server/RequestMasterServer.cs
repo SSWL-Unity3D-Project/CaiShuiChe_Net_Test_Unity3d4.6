@@ -1,5 +1,6 @@
+#define SHOW_NET_INFO
+
 using UnityEngine;
-using System.Collections;
 
 public class RequestMasterServer : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class RequestMasterServer : MonoBehaviour
 
 	void RequestHostListLoop()
 	{
-		MasterServer.RequestHostList("MyUniqueGameType");
+		MasterServer.RequestHostList(NetworkServerNet.GetInstance().mGameTypeName);
 	}
 
 	float RandConnectTime = Random.Range(3f, 10f);
@@ -49,22 +50,25 @@ public class RequestMasterServer : MonoBehaviour
 
 		// Go through all the hosts in the host list
 		foreach (var element in data) {
-			/*var name = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
+#if SHOW_NET_INFO
+            var name = element.gameName + " " + element.connectedPlayers + " / " + element.playerLimit;
 			GUILayout.BeginHorizontal();	
-			GUILayout.Label(name);	
-			GUILayout.Space(5);*/
-			var hostInfo = "[";
+			GUILayout.Box(name);	
+			GUILayout.Space(5);
+
+            var hostInfo = "[";
 			foreach (var host in element.ip) {
 				hostInfo = hostInfo + host + ":" + element.port + " ";
 			}
 			hostInfo = hostInfo + "]";
-			/*GUILayout.Label(hostInfo);
+            GUILayout.Box(hostInfo);
+            GUILayout.Space(5);
+			GUILayout.Box(element.comment);
 			GUILayout.Space(5);
-			GUILayout.Label(element.comment);
-			GUILayout.Space(5);
-			GUILayout.FlexibleSpace();*/
+			GUILayout.FlexibleSpace();
+#endif
 
-			if (element.comment == MasterServerGameNetComment
+            if (element.comment == MasterServerGameNetComment
 			    && ServerIp == element.ip[0]
 			    && Toubi.GetInstance() != null
 			    && !Toubi.GetInstance().IsIntoPlayGame) {
@@ -116,7 +120,7 @@ public class RequestMasterServer : MonoBehaviour
 						Debug.Log("Connect element.ip -> " + element.ip[0]
 						          + ", element.comment " + element.comment
 						          + ", gameLeve " + levelVal
-						          + ", time " + Time.realtimeSinceStartup);
+						          + ", time " + Time.realtimeSinceStartup.ToString("f2"));
 					}
 				}
 				else {
@@ -141,13 +145,14 @@ public class RequestMasterServer : MonoBehaviour
 						}
 					}
 				}
-			}
-			//GUILayout.EndHorizontal();	
-		}
-		//GUI.Label(new Rect(0f, 400f, 1000f, 30f), "TestDVal " + TestDVal.ToString());
-	}
+            }
+#if SHOW_NET_INFO
+            GUILayout.EndHorizontal();
+#endif
+        }
+    }
 
-	public void ResetIsClickConnect()
+    public void ResetIsClickConnect()
 	{
 		IsClickConnect = false;
 	}
@@ -256,24 +261,22 @@ public class RequestMasterServer : MonoBehaviour
 	}
 
 	void OnFailedToConnectToMasterServer(NetworkConnectionError info) {
-//		Debug.Log("Could not connect to master server: " + info);
-		if (Application.loadedLevel == (int)GameLeve.Movie) {
-			ServerLinkInfo.GetInstance().SetServerLinkInfo("Cannot Link MasterServer");
-		}
+		Debug.Log("Could not connect to master server: " + info);
+		//if (Application.loadedLevel == (int)GameLeve.Movie) {
+		//	ServerLinkInfo.GetInstance().SetServerLinkInfo("Cannot Link MasterServer");
+		//}
 	}
 
-	void OnMasterServerEvent(MasterServerEvent msEvent) {
-		if (msEvent == MasterServerEvent.RegistrationSucceeded) {
+	void OnMasterServerEvent(MasterServerEvent msEvent)
+    {
+        Debug.Log("OnMasterServerEvent: " + msEvent + ", time " + Time.time);
+        if (msEvent == MasterServerEvent.RegistrationSucceeded) {
 			Debug.Log("MasterServer registered, GameLevel " + GlobalData.GetInstance().gameLeve);
 			if (Application.loadedLevel == (int)GameLeve.Movie) {
-				ServerLinkInfo.GetInstance().HiddenServerLinkInfo();
-
+				//ServerLinkInfo.GetInstance().HiddenServerLinkInfo();
 				FreeModeCtrl.GetInstance().CreateNetworkRpc();
 			}
 		}
-//		else {
-//			Debug.Log("OnMasterServerEvent: " + msEvent);
-//		}
 	}
 }
 
