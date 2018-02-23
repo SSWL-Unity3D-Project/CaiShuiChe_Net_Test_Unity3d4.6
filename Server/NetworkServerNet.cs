@@ -95,8 +95,7 @@ public class NetworkServerNet : MonoBehaviour
 		}
 
 		while (true) {
-			Debug.Log("***************loadedLevel " + Application.loadedLevel
-			          + ", IsIntoPlayGame " + Toubi.GetInstance().IsIntoPlayGame);
+			Debug.Log("loadedLevel " + Application.loadedLevel + ", IsIntoPlayGame " + Toubi.GetInstance().IsIntoPlayGame);
 			if (Application.loadedLevel == (int)GameLeve.WaterwheelNet) {
 				break;
 			}
@@ -122,12 +121,7 @@ public class NetworkServerNet : MonoBehaviour
 		Transform tran = GameNetCtrlXK.GetInstance().PlayerPos[playerIndex].transform;
 		GameObject player = (GameObject)Network.Instantiate(obj, tran.position, tran.rotation, GlobalData.NetWorkGroup);
 		WaterwheelPlayerNetCtrl playerScript = player.GetComponent<WaterwheelPlayerNetCtrl>();
-		//playerScript.SetPlayerNetworkPlayer(playerNet);
 		playerScript.SetIsHandlePlayer();
-		
-		//GameNetCtrlXK.GetInstance().SetPlayerList(player, playerIndex);
-		
-		Spawner.SpawnerScript.SpawnNetObj();
 	}
 
 	void OnConnectedToServer()
@@ -138,28 +132,6 @@ public class NetworkServerNet : MonoBehaviour
 		if (GlobalData.GetInstance().gameLeve == GameLeve.WaterwheelNet) {
 			StartCoroutine(CheckConnectToServer());
 		}
-
-		//CheckShowAllCamera();
-		
-		/*if (GlobalData.GetInstance().gameLeve == GameLeve.WaterwheelNet
-		    && Application.loadedLevel == (int)GameLeve.WaterwheelNet) {*/
-//		if (GlobalData.GetInstance().gameLeve == GameLeve.WaterwheelNet) {
-//			GlobalData.GetInstance().RemoveNetworkRpc();
-//
-//			int playerIndex = IndexSpawnClient;
-//			Debug.Log("OnConnectedToServer::playerIndex " + playerIndex);
-//			
-//			GameObject obj = GameNetCtrlXK.GetInstance().PlayerObj[playerIndex];
-//			Transform tran = GameNetCtrlXK.GetInstance().PlayerPos[playerIndex].transform;
-//			GameObject player = (GameObject)Network.Instantiate(obj, tran.position, tran.rotation, GlobalData.NetWorkGroup);
-//			WaterwheelPlayerNetCtrl playerScript = player.GetComponent<WaterwheelPlayerNetCtrl>();
-//			//playerScript.SetPlayerNetworkPlayer(playerNet);
-//			playerScript.SetIsHandlePlayer();
-//			
-//			//GameNetCtrlXK.GetInstance().SetPlayerList(player, playerIndex);
-//
-//			Spawner.SpawnerScript.SpawnNetObj();
-//		}
 	}
 
 	void OnFailedToConnect(NetworkConnectionError error)
@@ -177,8 +149,6 @@ public class NetworkServerNet : MonoBehaviour
 		
 		//create player
 		if (GlobalData.GetInstance().gameLeve == GameLeve.WaterwheelNet ) {
-		    //&& Application.loadedLevel == (int)GameLeve.WaterwheelNet) {
-
 			StartCoroutine(CheckServerInitialized());
 		}
 	}
@@ -210,10 +180,9 @@ public class NetworkServerNet : MonoBehaviour
 		GameObject player = (GameObject)Network.Instantiate(obj, tran.position, tran.rotation, GlobalData.NetWorkGroup);
 		WaterwheelPlayerNetCtrl playerScript = player.GetComponent<WaterwheelPlayerNetCtrl>();
 		playerScript.SetIsHandlePlayer();
-		
-		Spawner.SpawnerScript.SpawnNetObj();
-		
-		CreateAiPlayer(); //create AiPlayer
+
+        //create AiPlayer
+        CreateAiPlayer();
 	}
 
 	void CreateAiPlayer()
