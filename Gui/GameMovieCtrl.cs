@@ -37,6 +37,11 @@ public class GameMovieCtrl : MonoBehaviour {
 	// Use this for initialization
 	void Start()
 	{
+        if (GameLinkSt == GameLinkEnum.LINK)
+        {
+            NetworkServerNet.GetInstance();
+        }
+
 		SetPanelUiRoot.YouMenSt = YouMenSt;
 		AudioListener.volume = (float)GlobalData.GameAudioVolume / 10f;
 		//if(_instance == null) {

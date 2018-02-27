@@ -15,9 +15,9 @@ public class SetPanelCtrl : MonoBehaviour {
 
 			pcvr.GetInstance();
 			
-			if (Application.loadedLevel == (int)GameLeve.Movie) {
-				NetworkServerNet.GetInstance();
-			}
+			//if (Application.loadedLevel == (int)GameLeve.Movie) {
+			//	NetworkServerNet.GetInstance();
+			//}
 			ScreenLog.init();
 		}
 		return Instance;

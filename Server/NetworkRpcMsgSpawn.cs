@@ -6,15 +6,12 @@
 public class NetworkRpcMsgSpawn : MonoBehaviour
 {
     public GameObject NetworkRpcObjPrefab;
-
+    /// <summary>
+    /// 创建NetworkRpcMsgCtrl组件(只在游戏的循环动画里进行).
+    /// </summary>
     public void CreateNetworkRpc()
     {
-        if (NetworkRpcMsgCtrl.GetInstance() != null || GlobalData.GetInstance().gameLeve != GameLeve.Movie)
-        {
-            return;
-        }
-
-        if (GlobalData.GetInstance().gameMode != GameMode.OnlineMode)
+        if (NetworkRpcMsgCtrl.GetInstance() != null)
         {
             return;
         }

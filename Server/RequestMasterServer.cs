@@ -5,12 +5,10 @@ using UnityEngine;
 public class RequestMasterServer : MonoBehaviour
 {
 	bool IsClickConnect;
-	
 	public static string MasterServerMovieComment = "Waterwheel Movie Scence";
 	public static string MasterServerGameNetComment = "Waterwheel GameNet Scence";
 	string ServerIp = "";
 	float TimeConnect;
-	//float MasterServerTime;
 
 	static RequestMasterServer _Instance;
 	public static RequestMasterServer GetInstance()
@@ -269,13 +267,15 @@ public class RequestMasterServer : MonoBehaviour
 
 	void OnMasterServerEvent(MasterServerEvent msEvent)
     {
-        Debug.Log("OnMasterServerEvent: " + msEvent + ", time " + Time.time);
+        //Debug.Log("OnMasterServerEvent: " + msEvent + ", time " + Time.time);
         if (msEvent == MasterServerEvent.RegistrationSucceeded) {
-			Debug.Log("MasterServer registered, GameLevel " + GlobalData.GetInstance().gameLeve);
-			if (Application.loadedLevel == (int)GameLeve.Movie) {
+			Debug.Log("MasterServer registered, GameLevel " + Application.loadedLevel);
+			if (Application.loadedLevel == 0)
+            {
+                //只在循环动画场景执行!
                 //ServerLinkInfo.GetInstance().HiddenServerLinkInfo();
                 NetworkRootMovie.GetInstance().mNetworkRpcMsgSpawn.CreateNetworkRpc();
-			}
+            }
 		}
 	}
 }

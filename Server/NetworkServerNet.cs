@@ -26,7 +26,9 @@ public class NetworkServerNet : MonoBehaviour
 	private static NetworkServerNet _Instance;
 	public static NetworkServerNet GetInstance()
 	{
-		if (_Instance == null) {
+		if (_Instance == null)
+        {
+            Debug.Log("creat NetworkServerNet...");
 			GameObject obj = new GameObject("_NetworkServerNet");
 			DontDestroyOnLoad(obj);
 			_Instance = obj.AddComponent<NetworkServerNet>();
